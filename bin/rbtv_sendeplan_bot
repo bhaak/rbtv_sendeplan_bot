@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+
+require 'rbtv_sendeplan_bot'
