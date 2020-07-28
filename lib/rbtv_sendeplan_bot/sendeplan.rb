@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 require 'open-uri'
 require 'json'
 
@@ -32,6 +30,7 @@ module RbtvSendeplanBot
             title: title,
             duration: entry[:duration],
             type: entry[:type].to_sym,
+            streamExclusive: entry[:streamExclusive],
           }
         }
       }.flatten

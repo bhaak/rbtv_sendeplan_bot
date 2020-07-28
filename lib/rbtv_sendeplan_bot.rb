@@ -1,7 +1,7 @@
 require "rbtv_sendeplan_bot/version"
 require "rbtv_sendeplan_bot/sendeplan"
+require "rbtv_sendeplan_bot/reddit"
 
-require 'reddit_bot'
 require 'optparse'
 
 WOCHENTAG = [:Sonntag, :Montag, :Dienstag, :Mittwoch, :Donnerstag, :Freitag, :Samstag, :Sonntag]
@@ -31,7 +31,7 @@ text = []
   text << titel
 
   w.select {|e| e[:day] == day }.each {|e|
-    if [:live, :premiere].include? e[:type]
+    if [:live, :premiere].include? e[:type] || e[:streamExclusive]
       programme = ""
       programme << "#{e[:starttime]} [#{e[:type].to_s[0].upcase}] "
       programme << "*" if subreddit && e[:type] == :live
@@ -45,15 +45,8 @@ text = []
 text << "Dieses Posting wird täglich aktualisiert. Der vollständige Sendeplan von RBTV ist unter https://rocketbeans.tv/sendeplan zu finden."
 
 if subreddit
-  today = Date.today
-  title = "Sendeplan-Thread der Kalenderwoche #{today.strftime('%-V')} des Jahres #{today.year}"
-  bot = RedditBot::Bot.new YAML.load(File.read "secrets.yaml")
-  bot.json :post, "/api/submit", {
-    sr: subreddit,
-    kind: "self",
-    title: title,
-    text: text.join("\n\n"),
-  }
+  reddit = RbtvSendeplanBot::Reddit.new subreddit: subreddit, text: text
+  reddit.post
 else
   puts text
 end
