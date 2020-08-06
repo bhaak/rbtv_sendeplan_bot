@@ -23,10 +23,12 @@ module RbtvSendeplanBot
         }
       else
         # update existing posting
-        @bot.json :post, "/api/editusertext", {
-          thing_id: @last_posting['name'],
-          text: @text.join("\n\n"),
-        }
+        if @text != @last_posting['selftext'].split("\n\n")
+          @bot.json :post, "/api/editusertext", {
+            thing_id: @last_posting['name'],
+            text: @text.join("\n\n"),
+          }
+        end
       end
     end
 
@@ -39,7 +41,7 @@ module RbtvSendeplanBot
       @last_posting = postings['data']['children'].find {|posting|
         posting['data']['subreddit_name_prefixed'] == @subreddit
       }
-      @last_posting = @last_posting['data'].slice('created','id','name')
+      @last_posting = @last_posting['data'].slice('created','id','name','selftext')
     end
 
   end
