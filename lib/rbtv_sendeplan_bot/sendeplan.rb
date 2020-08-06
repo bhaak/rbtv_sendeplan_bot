@@ -8,7 +8,7 @@ module RbtvSendeplanBot
       weekday = weekday - weekday.cwday + 1
 
       startDay = weekday.to_time + 10*60*60
-      endDay   = startDay + 7*86400 - 1
+      endDay   = startDay + 8*86400 - 1
       url = "https://api.rocketbeans.tv/v1/schedule/normalized?startDay=#{startDay.to_i}&endDay=#{endDay.to_i}"
       URI.open(url) {|request|
         @schedule = JSON.parse(request.read, symbolize_names: true)
