@@ -1,5 +1,6 @@
 require "rbtv_sendeplan_bot/version"
 require "rbtv_sendeplan_bot/sendeplan"
+require "rbtv_sendeplan_bot/sendeplan_formatter"
 require "rbtv_sendeplan_bot/reddit"
 
 require 'optparse'
@@ -19,30 +20,8 @@ OptionParser.new do |parser|
 end.parse!
 
 sendeplan = RbtvSendeplanBot::Sendeplan.new
-w = sendeplan.weekly_schedule
-
-text = []
-
-[Date.today, Date.today+1].each {|day|
-  titel = ""
-  titel << "**" if subreddit
-  titel << "Programm vom #{WOCHENTAG[day.wday]}, dem #{day.day}. #{MONAT[day.month]} #{day.year}"
-  titel << "**" if subreddit
-  text << titel
-
-  w.select {|e| e[:day] == day }.each {|e|
-    if [:live, :premiere].include? e[:type] || e[:streamExclusive]
-      programme = ""
-      programme << "#{e[:starttime]} [#{e[:type].to_s[0].upcase}] "
-      programme << "*" if subreddit && e[:type] == :live
-      programme << "#{e[:title]} (#{e[:duration]/60} Minuten)"
-      programme << "*" if subreddit && e[:type] == :live
-      text << programme
-    end
-  }
-  text << ""
-}
-text << "Dieses Posting wird täglich aktualisiert. Der vollständige Sendeplan von RBTV ist unter https://rocketbeans.tv/sendeplan zu finden."
+days = [Date.today, Date.today+1]
+text = RbtvSendeplanBot::SendeplanFormatter.new(days: days, sendeplan: sendeplan, tty: !subreddit, reddit: !!subreddit).format
 
 if subreddit
   reddit = RbtvSendeplanBot::Reddit.new subreddit: subreddit, text: text
