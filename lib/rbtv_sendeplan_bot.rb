@@ -21,7 +21,7 @@ end.parse!
 
 sendeplan = RbtvSendeplanBot::Sendeplan.new
 days = [Date.today, Date.today+1]
-text = RbtvSendeplanBot::SendeplanFormatter.new(days: days, sendeplan: sendeplan, tty: !subreddit, reddit: !!subreddit).format
+text = RbtvSendeplanBot::SendeplanFormatter.new(days: days, sendeplan: sendeplan, reddit: !!subreddit).format
 
 if subreddit
   reddit = RbtvSendeplanBot::Reddit.new subreddit: subreddit, text: text
