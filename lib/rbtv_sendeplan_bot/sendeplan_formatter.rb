@@ -1,8 +1,8 @@
 module RbtvSendeplanBot
   class SendeplanFormatter
-    def initialize days:, sendeplan:, reddit: false
+    def initialize days:, reddit: false
       @days = days
-      @sendeplan = sendeplan
+      @sendeplan = RbtvSendeplanBot::Sendeplan.new(@days.min)
 
       @bold_begin = @bold_end = ""
       @live_begin = @live_end = ""
@@ -21,7 +21,6 @@ module RbtvSendeplanBot
 
     def format
       w = @sendeplan.weekly_schedule
-
       text = []
 
       @days.each {|day|

@@ -19,9 +19,8 @@ OptionParser.new do |parser|
   parser.on('-r', '--subreddit=SUBREDDIT', 'Comma separated list of subreddits') {|r| subreddit = "r/#{r}" }
 end.parse!
 
-sendeplan = RbtvSendeplanBot::Sendeplan.new
 days = [Date.today, Date.today+1]
-text = RbtvSendeplanBot::SendeplanFormatter.new(days: days, sendeplan: sendeplan, reddit: !!subreddit).format
+text = RbtvSendeplanBot::SendeplanFormatter.new(days: days, reddit: !!subreddit).format
 
 if subreddit
   reddit = RbtvSendeplanBot::Reddit.new subreddit: subreddit, text: text
