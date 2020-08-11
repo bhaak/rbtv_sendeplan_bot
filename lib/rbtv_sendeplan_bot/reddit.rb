@@ -54,7 +54,8 @@ module RbtvSendeplanBot
 
       postings = @bot.json :get, "/user/#{@bot.name}/submitted"
       @last_posting = postings['data']['children'].find {|posting|
-        posting['data']['subreddit_name_prefixed'] == @subreddit
+        posting['data']['subreddit_name_prefixed'] == @subreddit &&
+          posting['data']['title'].include?('Sendeplan-Thread')
       }
       @last_posting = @last_posting['data'].slice('created','id','name','selftext')
     end
