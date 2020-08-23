@@ -8,7 +8,8 @@ module RbtvSendeplanBot
       @live_begin = @live_end = ""
       @premiere_begin = @premiere_end = ""
       if reddit
-        @bold_begin = @bold_end= "**"
+        @rerun_begin = @rerun_end = ""
+        @bold_begin = @bold_end = "**"
         @live_begin = @live_end = "*"
       elsif $stdout.tty?
         @bold_begin = "\033[1m"
@@ -19,7 +20,7 @@ module RbtvSendeplanBot
       end
     end
 
-    def format
+    def format(archival: false)
       w = @sendeplan.weekly_schedule
       text = []
 
@@ -46,7 +47,8 @@ module RbtvSendeplanBot
         }
         text << ""
       }
-      text << "Dieses Posting wird täglich aktualisiert. Der vollständige Sendeplan von RBTV ist unter https://rocketbeans.tv/sendeplan zu finden."
+      update_notice = archival ? '' : "Dieses Posting wird täglich aktualisiert. "
+      text << "#{update_notice}Der vollständige Sendeplan von RBTV ist unter https://rocketbeans.tv/sendeplan zu finden."
     end
   end
 end

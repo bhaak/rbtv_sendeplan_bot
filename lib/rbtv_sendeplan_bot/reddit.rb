@@ -17,7 +17,7 @@ module RbtvSendeplanBot
         # new week, update old posting with complete week data
         last_monday = Time.at(last_posting['created']).to_date.yield_self {|date| date - date.cwday + 1 }
         days = (0..6).map {|i| last_monday + i }
-        last_week = RbtvSendeplanBot::SendeplanFormatter.new(days: days, reddit: true).format
+        last_week = RbtvSendeplanBot::SendeplanFormatter.new(days: days, reddit: true).format(archival: true)
         puts "Update posting from last week #{last_posting['id']}"
         update_posting name: last_posting['name'], text: last_week.join("\n\n")
 
