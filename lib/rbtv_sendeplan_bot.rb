@@ -19,7 +19,12 @@ OptionParser.new do |parser|
   parser.on('-r', '--subreddit=SUBREDDIT', 'Comma separated list of subreddits') {|r| subreddit = "r/#{r}" }
 end.parse!
 
-days = [Date.today, Date.today+1]
+if Date.today.sunday?
+  days = [Date.today, Date.today+1]
+else
+  days = (0..6).map {|i| Date.today + i }
+  days = days[0..days.find_index(&:sunday?)]
+end
 text = RbtvSendeplanBot::SendeplanFormatter.new(days: days, reddit: !!subreddit).format
 
 if subreddit
