@@ -13,22 +13,27 @@ module RbtvSendeplanBot
       today = Date.today
       title = "Sendeplan-Thread der Kalenderwoche #{today.strftime('%-V')} des Jahres #{today.year}"
 
-      if last_posting && today.cweek != Time.at(last_posting['created']).to_date.cweek
-        # new week, update old posting with complete week data
-        last_monday = Time.at(last_posting['created']).to_date.yield_self {|date| date - date.cwday + 1 }
-        days = (0..6).map {|i| last_monday + i }
-        last_week = RbtvSendeplanBot::SendeplanFormatter.new(days: days, reddit: true).format(archival: true)
-        puts "Update posting from last week #{last_posting['id']}"
-        update_posting name: last_posting['name'], text: last_week.join("\n\n")
+      obsolete_posting = last_posting && today.cweek != Time.at(last_posting['created']).to_date.cweek
+      if !last_posting || obsolete_posting
+        if last_posting
+          # new week, update old posting with complete week data
+          last_monday = Time.at(last_posting['created']).to_date.yield_self {|date| date - date.cwday + 1 }
+          days = (0..6).map {|i| last_monday + i }
+          last_week = RbtvSendeplanBot::SendeplanFormatter.new(days: days, reddit: true).format(archival: true)
+          puts "Update posting from last week #{last_posting['id']}"
+          update_posting name: last_posting['name'], text: last_week.join("\n\n")
+        end
 
         # new week, create a new posting
         puts "New posting for week #{today.cweek}"
-        @bot.json :post, "/api/submit", {
+        data = @bot.json :post, "/api/submit", {
           sr: @subreddit,
           kind: "self",
           title: title,
           text: @text.join("\n\n"),
         }
+        name = data.dig('json', 'data', 'name')
+        set_sticky name: name if name
       else
         # update existing posting
         if @text != last_posting['selftext'].split("\n\n")
@@ -49,6 +54,14 @@ module RbtvSendeplanBot
       }
     end
 
+    def set_sticky(name:)
+      @bot.json :post, "/api/set_subreddit_sticky", {
+        id: name,
+        num: 4,
+        state: true,
+      }
+    end
+
     def last_posting
       return @last_posting if @last_posting
 
@@ -57,6 +70,7 @@ module RbtvSendeplanBot
         posting['data']['subreddit_name_prefixed'] == @subreddit &&
           posting['data']['title'].include?('Sendeplan-Thread')
       }
+      return nil if !@last_posting
       @last_posting = @last_posting['data'].slice('created','id','name','selftext')
     end
 
