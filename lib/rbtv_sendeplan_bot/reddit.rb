@@ -36,7 +36,7 @@ module RbtvSendeplanBot
         set_sticky name: name if name
       else
         # update existing posting
-        if @text != last_posting['selftext'].split("\n\n")
+        if @text != last_posting['selftext'].gsub('&amp;','&').split("\n\n")
           puts "Update existing posting #{last_posting['id']}"
           update_posting name: last_posting['name'], text: @text.join("\n\n")
         else
