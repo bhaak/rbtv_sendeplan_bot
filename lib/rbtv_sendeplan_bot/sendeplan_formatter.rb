@@ -52,6 +52,7 @@ module RbtvSendeplanBot
       }
       update_notice = archival ? '' : "Dieses Posting wird täglich aktualisiert. "
       text << "#{update_notice}Der vollständige Sendeplan von RBTV ist unter https://rocketbeans.tv/sendeplan zu finden."
+      text << "\nUnter https://redd.it/if366o wird eine Liste von gerade streamenden Bohnen bzw. VoDs ihrer letzten Livestream-Sessions gepflegt."
     end
   end
 end
