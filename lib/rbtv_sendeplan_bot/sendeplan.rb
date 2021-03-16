@@ -25,7 +25,8 @@ module RbtvSendeplanBot
           start_time = Time.parse(entry[:timeStart]).localtime.strftime("%H:%M")
 
           {
-            day: Time.parse(day[:date]).localtime.to_date,
+            # day starts at 06:00, show night time programmes on previous day
+            day: (Time.parse(entry[:timeStart]).localtime - 6*60*60).to_date,
             starttime: start_time,
             title: title,
             duration: entry[:duration],
