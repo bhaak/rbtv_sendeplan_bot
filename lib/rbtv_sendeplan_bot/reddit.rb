@@ -22,6 +22,9 @@ module RbtvSendeplanBot
           last_week = RbtvSendeplanBot::SendeplanFormatter.new(days: days, reddit: true).format(archival: true)
           puts "Update posting from last week #{last_posting['id']}"
           update_posting name: last_posting['name'], text: last_week.join("\n\n")
+
+          # unsticky old posting
+          @bot.json :post, "/api/set_subreddit_sticky", { id: last_posting['name'], state: false }
         end
 
         # new week, create a new posting
