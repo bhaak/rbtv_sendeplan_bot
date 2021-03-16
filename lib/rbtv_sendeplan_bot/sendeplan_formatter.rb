@@ -51,8 +51,10 @@ module RbtvSendeplanBot
         text << ""
       }
       update_notice = archival ? '' : "Dieses Posting wird täglich aktualisiert. "
+      text << "---"
       text << "#{update_notice}Der vollständige Sendeplan von RBTV ist unter https://rocketbeans.tv/sendeplan zu finden."
       text << "\nUnter https://redd.it/if366o wird eine Liste von gerade streamenden Bohnen bzw. VoDs ihrer letzten Livestream-Sessions gepflegt."
+      text << "\nDie Rust Let's Plays werden in voller Länge seit Folge 4 ungelistet auf dem \"Let’s Play & Streams\"-Kanal hochgeladen und sind [in dieser Playlist](https://rbtv.to/RustVolleLaengeYT) zu finden."
     end
   end
 end
