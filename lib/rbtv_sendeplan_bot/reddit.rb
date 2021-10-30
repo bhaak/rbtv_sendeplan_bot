@@ -1,4 +1,5 @@
 require 'reddit_bot'
+require 'htmlentities'
 
 module RbtvSendeplanBot
   class Reddit
@@ -38,8 +39,9 @@ module RbtvSendeplanBot
         name = data.dig('json', 'data', 'name')
         set_sticky name: name if name
       else
+        htmlentities = HTMLEntities.new
         # update existing posting
-        if @text != last_posting['selftext'].gsub('&amp;','&').split("\n\n")
+        if @text != htmlentities.decode(last_posting['selftext']).split("\n\n")
           puts "Update existing posting #{last_posting['id']}"
           update_posting name: last_posting['name'], text: @text.join("\n\n")
         else
