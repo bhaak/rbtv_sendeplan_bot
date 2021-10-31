@@ -32,15 +32,19 @@ module RbtvSendeplanBot
         text << titel
 
         w.select {|e| e[:day] == day }.each {|e|
-          live_or_premiere = [:live, :premiere].include?(e[:type])
+          keine_wiederholung = [:live, :premiere, :upload].include?(e[:type])
           ohne_vod = e[:streamExclusive]
-          if live_or_premiere || ohne_vod
+          if keine_wiederholung || ohne_vod
             programme = ""
             programme << "#{e[:starttime]} [#{e[:type].to_s[0].upcase}] "
             programme << @live_begin if e[:type] == :live
             programme << @premiere_begin if e[:type] == :premiere
             programme << @rerun_begin if e[:type] == :rerun
-            programme << "#{e[:title]} (#{e[:duration]/60} Minuten)"
+            if e[:duration]
+              programme << "#{e[:title]} (#{e[:duration]/60} Minuten)"
+            else
+              programme << e[:title]
+            end
             programme << " (ohne VOD)" if ohne_vod
             programme << @rerun_end if e[:type] == :rerun
             programme << @premiere_end if e[:type] == :premiere
