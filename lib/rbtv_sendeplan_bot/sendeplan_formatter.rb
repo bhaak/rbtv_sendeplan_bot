@@ -7,6 +7,7 @@ module RbtvSendeplanBot
       @bold_begin = @bold_end = ""
       @live_begin = @live_end = ""
       @premiere_begin = @premiere_end = ""
+      @reddit = reddit
       if reddit
         @rerun_begin = @rerun_end = ""
         @bold_begin = @bold_end = "**"
@@ -34,17 +35,20 @@ module RbtvSendeplanBot
         w.select {|e| e[:day] == day }.each {|e|
           keine_wiederholung = [:live, :premiere, :upload].include?(e[:type])
           ohne_vod = e[:streamExclusive]
+          verlinken = @reddit && e[:episodeId].to_i > 0 && Date.today > e[:day]
+
           if keine_wiederholung || ohne_vod
             programme = ""
             programme << "#{e[:starttime]} [#{e[:type].to_s[0].upcase}] "
             programme << @live_begin if e[:type] == :live
             programme << @premiere_begin if e[:type] == :premiere
             programme << @rerun_begin if e[:type] == :rerun
-            if e[:duration]
-              programme << "#{e[:title]} (#{e[:duration]/60} Minuten)"
-            else
-              programme << e[:title]
-            end
+
+            programme << "[" if verlinken
+            programme << e[:title]
+            programme << "](https://rocketbeans.tv/mediathek/video/#{e[:episodeId]})" if verlinken
+
+            programme << " (#{e[:duration]/60} Minuten)" if e[:duration]
             programme << " (ohne VOD)" if ohne_vod
             programme << @rerun_end if e[:type] == :rerun
             programme << @premiere_end if e[:type] == :premiere

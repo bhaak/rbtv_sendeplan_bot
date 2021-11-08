@@ -46,6 +46,7 @@ module RbtvSendeplanBot
         duration: entry[:duration],
         type: (entry[:type] || "upload").to_sym,
         streamExclusive: entry[:streamExclusive],
+        episodeId: entry[:episodeId],
         bohnen: entry[:bohnen] ? entry[:bohnen].map {|b| b[:name] }.sort.join(', ') : []
       }
     end
