@@ -48,7 +48,12 @@ module RbtvSendeplanBot
             programme << e[:title]
             programme << "](https://rocketbeans.tv/mediathek/video/#{e[:episodeId]})" if verlinken
 
-            programme << " (#{e[:duration]/60} Minuten)" if e[:duration]
+            if e[:openEnd]
+              programme << " (Open End)"
+            elsif e[:duration]
+              programme << " (#{e[:duration]/60} Minuten)"
+            end
+
             programme << " (ohne VOD)" if ohne_vod
             programme << @rerun_end if e[:type] == :rerun
             programme << @premiere_end if e[:type] == :premiere
