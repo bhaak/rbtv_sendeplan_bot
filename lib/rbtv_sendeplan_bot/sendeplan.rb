@@ -1,6 +1,8 @@
 require 'open-uri'
 require 'json'
 
+require 'rbtv_sendeplan_bot/util'
+
 module RbtvSendeplanBot
   class Sendeplan
     def initialize weekday=Date.today
@@ -21,17 +23,7 @@ module RbtvSendeplanBot
     end
 
     def format_entry entry
-      show_title = entry[:showTitle].to_s.strip
-      title = entry[:title].to_s.strip
-      title = title.gsub(/ -$/, "").to_s.strip
-      sub_title = entry[:topic].to_s.strip
-
-      title_parts = []
-      title_parts << show_title if !title.start_with?(show_title)
-      title_parts << title
-      title_parts << sub_title if !title.include?(sub_title)
-
-      display_title = title_parts.uniq.reject(&:empty?).take(2).join(" - ").gsub(/ +/, " ")
+      display_title = Util.display_title entry
 
       time = entry[:timeStart] || entry[:uploadDate]
       start_time = Time.parse(time).localtime.strftime("%H:%M")

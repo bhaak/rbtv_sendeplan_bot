@@ -9,6 +9,7 @@ GEM
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     coderay (1.1.3)
+    diff-lcs (1.5.0)
     htmlentities (4.3.4)
     json_pure (2.6.1)
     method_source (1.0.0)
@@ -21,6 +22,19 @@ GEM
     reddit_bot (1.10.0)
       json_pure
       nethttputils (~> 0.4.2.0)
+    rspec (3.10.0)
+      rspec-core (~> 3.10.0)
+      rspec-expectations (~> 3.10.0)
+      rspec-mocks (~> 3.10.0)
+    rspec-core (3.10.1)
+      rspec-support (~> 3.10.0)
+    rspec-expectations (3.10.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.10.0)
+    rspec-mocks (3.10.2)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.10.0)
+    rspec-support (3.10.3)
 
 PLATFORMS
   x86_64-linux
@@ -30,6 +44,7 @@ DEPENDENCIES
   pry
   rbtv_sendeplan_bot!
   reddit_bot
+  rspec
 
 BUNDLED WITH
    2.3.1
