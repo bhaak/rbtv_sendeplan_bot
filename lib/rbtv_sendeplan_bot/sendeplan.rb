@@ -66,7 +66,7 @@ module RbtvSendeplanBot
         }
       }.flatten.uniq
 
-      (schedule + uploads).sort_by {|e| [e[:day], e[:starttime]] }
+      (schedule + uploads).sort_by {|e| [e[:day], e[:type].to_s.bytes.first * -1, e[:starttime]] }
     end
 
   end
