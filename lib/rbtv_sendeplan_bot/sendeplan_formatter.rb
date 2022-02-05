@@ -3,6 +3,7 @@ module RbtvSendeplanBot
     def initialize days:, reddit: false
       @days = days
       @sendeplan = RbtvSendeplanBot::Sendeplan.new(@days.min)
+      @published_videos = RbtvSendeplanBot::PublishedVideos.new(Date.today-7)
 
       @bold_begin = @bold_end = ""
       @live_begin = @live_end = ""
@@ -63,6 +64,24 @@ module RbtvSendeplanBot
         }
         text << ""
       }
+
+      # Uploads
+      if @published_videos.uploads.size > 0
+        text << "#{@bold_begin}VOD-Uploads der letzten 7 Tage#{@bold_end}"
+        @published_videos.uploads.each { |upload|
+          verlinken = @reddit && upload[:episodeId].to_i > 0
+          programme = ""
+          upload_time = upload[:day].strftime("%d.%m.%Y")
+          programme << "#{upload_time} #{upload[:starttime]} "
+          programme << "[" if verlinken
+          programme << upload[:title]
+          programme << "](https://rocketbeans.tv/mediathek/video/#{upload[:episodeId]})" if verlinken
+          text << programme
+        }
+        text << ""
+      end
+
+      # additional information
       update_notice = archival ? '' : "Dieses Posting wird täglich aktualisiert. "
       text << "#{update_notice}Der vollständige Sendeplan von RBTV ist unter https://rocketbeans.tv/sendeplan zu finden."
       text << "\nDer Uploadplan mit allen Uploads dieser Woche ist hier https://rocketbeans.tv/mediathek/uploadplan."

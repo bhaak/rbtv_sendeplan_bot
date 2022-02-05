@@ -1,5 +1,6 @@
 require "rbtv_sendeplan_bot/version"
 require "rbtv_sendeplan_bot/sendeplan"
+require "rbtv_sendeplan_bot/published_videos"
 require "rbtv_sendeplan_bot/sendeplan_formatter"
 require "rbtv_sendeplan_bot/reddit"
 

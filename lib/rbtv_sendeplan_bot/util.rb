@@ -1,7 +1,7 @@
 module RbtvSendeplanBot
   module Util
     def self.display_title entry
-      show_title = entry[:showTitle].to_s.strip
+      show_title = (entry[:showTitle] || entry[:showName]).to_s.strip
       title = entry[:title].to_s.strip
       sub_title = entry[:topic].to_s.strip
 

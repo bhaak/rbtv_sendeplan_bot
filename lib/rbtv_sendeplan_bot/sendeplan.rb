@@ -25,7 +25,7 @@ module RbtvSendeplanBot
     def format_entry entry
       display_title = Util.display_title entry
 
-      time = entry[:timeStart] || entry[:uploadDate]
+      time = entry[:timeStart] || entry[:uploadDate] || entry[:distributionPublishingDate]
       start_time = Time.parse(time).localtime.strftime("%H:%M")
       publishing_date = Time.parse(entry[:publishingDate]).localtime.strftime("%Y-%m-%d %H:%M") if entry[:publishingDate]
 
