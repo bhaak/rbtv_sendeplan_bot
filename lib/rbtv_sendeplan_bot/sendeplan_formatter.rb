@@ -27,13 +27,16 @@ module RbtvSendeplanBot
       text = []
 
       @days.each {|day|
+        items = w.select {|e| e[:day] == day }
+        next if items.empty?
+
         titel = ""
         titel << @bold_begin
         titel << "Programm vom #{WOCHENTAG[day.wday]}, dem #{day.day}. #{MONAT[day.month]} #{day.year}"
         titel << @bold_end
         text << titel
 
-        w.select {|e| e[:day] == day }.each {|e|
+        items.each {|e|
           keine_wiederholung = [:live, :premiere, :upload].include?(e[:type])
           ohne_vod = e[:streamExclusive]
           verlinken = @reddit && e[:episodeId].to_i > 0 && Date.today > e[:day]
