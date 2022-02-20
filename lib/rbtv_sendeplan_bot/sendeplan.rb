@@ -6,9 +6,6 @@ require 'rbtv_sendeplan_bot/util'
 module RbtvSendeplanBot
   class Sendeplan
     def initialize weekday=Date.today
-      # ensure it's a Monday
-      weekday = weekday - weekday.cwday + 1
-
       startDay = weekday.to_time + 10*60*60
       endDay   = startDay + 8*86400 - 1
       url = "https://api.rocketbeans.tv/v1/schedule/normalized?startDay=#{startDay.to_i}&endDay=#{endDay.to_i}"
