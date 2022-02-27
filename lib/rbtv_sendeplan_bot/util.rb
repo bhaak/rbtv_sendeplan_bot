@@ -12,7 +12,7 @@ module RbtvSendeplanBot
       title_parts << sub_title if !title.include?(sub_title)
 
       title_parts.each { |str| str.gsub!(/ [-|]$/, "").to_s.strip }
-      title_parts.uniq.reject(&:empty?).take(2).join(" - ").gsub(/ +/, " ")
+      title_parts.uniq.reject(&:empty?).take(2).join(" - ").gsub(/ +/, " ").gsub(/^Event - /, "")
     end
   end
 end

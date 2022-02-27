@@ -35,5 +35,13 @@ describe RbtvSendeplanBot::Util do
         expect(subject).to eq "Show - Title"
       end
     end
+
+    describe "mit showTitle und topic ein Teil von title" do
+      let(:entry) { { showTitle: "Event", title: "Title | A SHOW 1/3", topic: "A show #1" } }
+
+      it "liefert title und topic" do
+        expect(subject).to eq entry[:title]
+      end
+    end
   end
 end
