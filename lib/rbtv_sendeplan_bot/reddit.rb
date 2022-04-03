@@ -30,11 +30,13 @@ module RbtvSendeplanBot
 
         # new week, create a new posting
         puts "New posting for week #{today.cweek}"
+        flair_id = "21b280bc-ac7c-11ec-b868-4a86859e8468" # Sendeplan
         data = @bot.json :post, "/api/submit", {
           sr: @subreddit,
           kind: "self",
           title: title,
           text: @text.join("\n\n"),
+          flair_id: flair_id,
         }
         name = data.dig('json', 'data', 'name')
         set_sticky name: name if name
