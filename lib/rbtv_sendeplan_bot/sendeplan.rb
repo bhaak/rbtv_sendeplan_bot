@@ -29,6 +29,7 @@ module RbtvSendeplanBot
       {
         # day starts at 06:00, show night time programmes on previous day
         day: (Time.parse(time).localtime - 6*60*60).to_date,
+        sorting_time: time,
         starttime: start_time,
         publishingDate: publishing_date,
         title: display_title,
@@ -55,7 +56,7 @@ module RbtvSendeplanBot
         }
       }.flatten.uniq
 
-      (schedule + uploads).sort_by {|e| [e[:day], e[:type].to_s.bytes.first * -1, e[:starttime]] }
+      (schedule + uploads).sort_by {|e| [e[:day], e[:type].to_s.bytes.first * -1, e[:sorting_time]] }
     end
 
   end
