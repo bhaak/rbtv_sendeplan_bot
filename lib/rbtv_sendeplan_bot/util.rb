@@ -7,7 +7,7 @@ module RbtvSendeplanBot
 
       title_parts = []
       title_parts << show_title if !title.start_with?(show_title)
-      title = title[0..-1*show_title.size-1].strip if title.end_with?(show_title)
+      title = title[0..-1*show_title.size-1].strip if title.downcase.end_with?(show_title.downcase)
       title_parts << title
       title_parts << sub_title if !title.include?(sub_title)
 

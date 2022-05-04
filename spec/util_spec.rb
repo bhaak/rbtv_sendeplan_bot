@@ -34,6 +34,20 @@ describe RbtvSendeplanBot::Util do
       it "liefert title und topic" do
         expect(subject).to eq "Show - Title"
       end
+
+      describe "mit Grossbuchstaben" do
+        let(:entry) {
+          {
+            showTitle: "Show Title",
+            title: "Some description | Somebody does something! | SHOW TITLE",
+            topic: "More description | Somebody does something!",
+          }
+        }
+
+        it "ignoriert unterschiedliche Gross- und Kleinbuchstaben" do
+          expect(subject).to eq "Show Title - Some description | Somebody does something!"
+        end
+      end
     end
 
     describe "mit showTitle und topic ein Teil von title" do
