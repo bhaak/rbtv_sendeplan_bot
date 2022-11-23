@@ -26,6 +26,8 @@ module RbtvSendeplanBot
       start_time = Time.parse(time).localtime.strftime("%H:%M")
       publishing_date = Time.parse(entry[:publishingDate]).localtime.strftime("%Y-%m-%d %H:%M") if entry[:publishingDate]
 
+      # workaround
+      entry[:bohnen] = entry[:bohnen].values if entry[:bohnen].class == Hash
       {
         # day starts at 06:00, show night time programmes on previous day
         day: (Time.parse(time).localtime - 6*60*60).to_date,
