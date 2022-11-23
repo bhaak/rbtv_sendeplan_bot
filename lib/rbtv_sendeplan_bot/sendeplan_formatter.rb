@@ -87,10 +87,11 @@ module RbtvSendeplanBot
       # additional information
       text << "#{@bold_begin}Weiterführende Links#{@bold_end}"
       update_notice = archival ? '' : "Dieses Posting wird täglich aktualisiert. "
-      text << "#{update_notice}Der vollständige Sendeplan von RBTV ist unter https://rocketbeans.tv/sendeplan zu finden."
+      text << "#{update_notice}Die vollständige Liste aller Livestreams von RBTV ist unter https://rocketbeans.tv/livestreams zu finden."
       text << "\nDer Uploadplan mit allen Uploads dieser Woche ist hier https://rocketbeans.tv/mediathek/uploadplan."
       text << "\nKurzfristige YouTube-Upload-Änderungen werden im Forum in diesem Thread kommuniziert https://forum.rocketbeans.tv/t/rbtv-youtube-uploads-channel-managment-ticker/91004/9999."
       text << "\nUnter https://redd.it/if366o wird eine Liste von gerade streamenden Bohnen bzw. VoDs ihrer letzten Livestream-Sessions gepflegt."
+      text << "\nAlle Folgen von MoinMoin schaut Maskedminds in diesem Thread https://redd.it/y4ih4j"
     end
   end
 end
