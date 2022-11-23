@@ -65,5 +65,19 @@ describe RbtvSendeplanBot::Util do
         expect(subject).to eq "Serie - Topic"
       end
     end
+
+    describe 'mit Teilen in title dupliziert' do
+      let(:entry) {
+        {
+          :title=>"Title | Something else #123 | Something Else #123",
+          :topic=>"Topic",
+          :showTitle=>"Show Title",
+        }
+      }
+
+      it "liefert showTitle und topic" do
+        expect(subject).to eq "Show Title - Title | Something else #123"
+      end
+    end
   end
 end
