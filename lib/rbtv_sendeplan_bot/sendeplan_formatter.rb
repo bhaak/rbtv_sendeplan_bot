@@ -30,45 +30,56 @@ module RbtvSendeplanBot
         items = w.select {|e| e[:day] == day }
         next if items.empty?
 
-        titel = ""
-        titel << @bold_begin
-        titel << "Programm vom #{WOCHENTAG[day.wday]}, dem #{day.day}. #{MONAT[day.month]} #{day.year}"
-        titel << @bold_end
-        text << titel
+        add_items(text, items, day)
 
-        items.each {|e|
-          keine_wiederholung = [:live, :premiere, :upload].include?(e[:type])
-          ohne_vod = e[:streamExclusive]
-          verlinken = @reddit && e[:episodeId].to_i > 0 && Date.today > e[:day]
+        add_published_videos(text)
 
-          if keine_wiederholung || ohne_vod
-            programme = ""
-            programme << "#{e[:starttime]} [#{e[:type].to_s[0].upcase}] "
-            programme << @live_begin if e[:type] == :live
-            programme << @premiere_begin if e[:type] == :premiere
-            programme << @rerun_begin if e[:type] == :rerun
-
-            programme << "[" if verlinken
-            programme << e[:title]
-            programme << "](https://rocketbeans.tv/mediathek/video/#{e[:episodeId]})" if verlinken
-
-            if e[:openEnd]
-              programme << " (Open End)"
-            elsif e[:duration]
-              programme << " (#{e[:duration]/60} Minuten)"
-            end
-
-            programme << " (ohne VOD)" if ohne_vod
-            programme << @rerun_end if e[:type] == :rerun
-            programme << @premiere_end if e[:type] == :premiere
-            programme << @live_end if e[:type] == :live
-            text << programme
-          end
-        }
-        text << ""
       }
+      additional_information(text, archival)
+      text
+    end
 
-      # Uploads
+    def add_items(text, items, day)
+      # Livestreams, Programm, Uploads
+      titel = ""
+      titel << @bold_begin
+      titel << "Programm vom #{WOCHENTAG[day.wday]}, dem #{day.day}. #{MONAT[day.month]} #{day.year}"
+      titel << @bold_end
+      text << titel
+
+      items.each {|e|
+        keine_wiederholung = [:live, :premiere, :upload].include?(e[:type])
+        ohne_vod = e[:streamExclusive]
+        verlinken = @reddit && e[:episodeId].to_i > 0 && Date.today > e[:day]
+
+        if keine_wiederholung || ohne_vod
+          programme = ""
+          programme << "#{e[:starttime]} [#{e[:type].to_s[0].upcase}] "
+          programme << @live_begin if e[:type] == :live
+          programme << @premiere_begin if e[:type] == :premiere
+          programme << @rerun_begin if e[:type] == :rerun
+
+          programme << "[" if verlinken
+          programme << e[:title]
+          programme << "](https://rocketbeans.tv/mediathek/video/#{e[:episodeId]})" if verlinken
+
+          if e[:openEnd]
+            programme << " (Open End)"
+          elsif e[:duration]
+            programme << " (#{e[:duration]/60} Minuten)"
+          end
+
+          programme << " (ohne VOD)" if ohne_vod
+          programme << @rerun_end if e[:type] == :rerun
+          programme << @premiere_end if e[:type] == :premiere
+          programme << @live_end if e[:type] == :live
+          text << programme
+        end
+      }
+      text << ""
+    end
+
+    def add_published_videos(text)
       if @published_videos.uploads.size > 0
         text << "#{@bold_begin}VOD-Uploads der letzten 7 Tage#{@bold_end}"
         @published_videos.uploads.each { |upload|
@@ -83,8 +94,9 @@ module RbtvSendeplanBot
         }
         text << ""
       end
+    end
 
-      # additional information
+    def additional_information(text, archival)
       text << "#{@bold_begin}Weiterführende Links#{@bold_end}"
       update_notice = archival ? '' : "Dieses Posting wird täglich aktualisiert. "
       text << "#{update_notice}Die vollständige Liste aller Livestreams von RBTV ist unter https://rocketbeans.tv/livestreams zu finden."
