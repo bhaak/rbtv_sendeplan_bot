@@ -40,6 +40,7 @@ module RbtvSendeplanBot
         streamExclusive: entry[:streamExclusive],
         episodeId: entry[:episodeId],
         openEnd: entry[:openEnd],
+        isRBTV: entry[:channelGroups]&.any? { |c| c[:type].include?("main") },
         bohnen: entry[:bohnen] ? entry[:bohnen].map {|b| b[:name] }.sort.join(', ') : []
       }
     end

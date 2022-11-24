@@ -30,20 +30,27 @@ module RbtvSendeplanBot
         items = w.select {|e| e[:day] == day }
         next if items.empty?
 
-        add_items(text, items, day)
-
-        add_published_videos(text)
-
+        add_items(text, items.select { |item| item[:type] == :live && item[:isRBTV] }, day, :Programm)
+        add_items(text, items.select { |item| item[:type] == :upload }, day, :Uploads)
       }
+
+      @days.each {|day|
+        items = w.select {|e| e[:day] == day }
+        next if items.empty?
+
+        add_items(text, items.select { |item| item[:type] == :live && !item[:isRBTV] }, day, :Livestreams)
+      }
+      add_published_videos(text)
       additional_information(text, archival)
       text
     end
 
-    def add_items(text, items, day)
-      # Livestreams, Programm, Uploads
+    def add_items(text, items, day, type)
+      return if items.empty?
+
       titel = ""
       titel << @bold_begin
-      titel << "Programm vom #{WOCHENTAG[day.wday]}, dem #{day.day}. #{MONAT[day.month]} #{day.year}"
+      titel << "#{type} vom #{WOCHENTAG[day.wday]}, dem #{day.day}. #{MONAT[day.month]} #{day.year}"
       titel << @bold_end
       text << titel
 
