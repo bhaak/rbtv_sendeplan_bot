@@ -30,16 +30,20 @@ module RbtvSendeplanBot
         items = w.select {|e| e[:day] == day }
         next if items.empty?
 
-        add_items(text, items.select { |item| item[:type] == :live && item[:isRBTV] }, day, :Programm)
+        add_items(text, items.select { |item| [:live, :premiere].include?(item[:type]) && item[:isRBTV] }, day, :Programm)
         add_items(text, items.select { |item| item[:type] == :upload }, day, :Uploads)
       }
 
+      ignored_channels = ['Dennsen86', 'Haselnuuuss', 'suuN', 'Kaaaay', 'Viet', 'Krogmann']
       @days.each {|day|
         items = w.select {|e| e[:day] == day }
-        next if items.empty?
+        filtered_items = items.select { |item| item[:type] == :live && !item[:isRBTV] }
+                              .reject { |item| ignored_channels.include?(item[:channelName]) }
+        next if filtered_items.empty?
 
-        add_items(text, items.select { |item| item[:type] == :live && !item[:isRBTV] }, day, :Livestreams)
+        add_items(text, filtered_items, day, :Livestreams)
       }
+
       add_published_videos(text)
       additional_information(text, archival)
       text

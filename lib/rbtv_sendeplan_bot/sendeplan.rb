@@ -41,6 +41,7 @@ module RbtvSendeplanBot
         episodeId: entry[:episodeId],
         openEnd: entry[:openEnd],
         isRBTV: entry[:channelGroups]&.any? { |c| c[:type].include?("main") },
+        channelName: entry[:channelGroups]&.first&.fetch(:name, nil),
         bohnen: entry[:bohnen] ? entry[:bohnen].map {|b| b[:name] }.sort.join(', ') : []
       }
     end
