@@ -73,6 +73,8 @@ module RbtvSendeplanBot
       return @last_posting if @last_posting
 
       postings = @bot.json :get, "/user/#{@bot.name}/submitted"
+      return raise('No data received. Reddit having issues?') if postings['data']['children'].empty?
+
       @last_posting = postings['data']['children'].find {|posting|
         posting['data']['subreddit_name_prefixed'] == @subreddit &&
           posting['data']['title'].include?('Sendeplan-Thread')
