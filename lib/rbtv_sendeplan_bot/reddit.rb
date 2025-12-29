@@ -12,7 +12,7 @@ module RbtvSendeplanBot
 
     def post
       today = Date.today
-      title = "Sendeplan-Thread der Kalenderwoche #{today.strftime('%-V')} des Jahres #{today.year}"
+      title = "Sendeplan-Thread der Kalenderwoche #{today.strftime('%-V')} des Jahres #{today.cwyear}"
 
       obsolete_posting = last_posting && today.cweek != Time.at(last_posting['created']).to_date.cweek
       if !last_posting || obsolete_posting
