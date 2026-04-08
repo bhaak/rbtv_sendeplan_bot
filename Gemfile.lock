@@ -6,8 +6,8 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.0)
-      public_suffix (>= 2.0.2, < 5.0)
+    addressable (2.9.0)
+      public_suffix (>= 2.0.2, < 8.0)
     coderay (1.1.3)
     diff-lcs (1.5.0)
     htmlentities (4.3.4)
@@ -18,7 +18,7 @@ GEM
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    public_suffix (4.0.6)
+    public_suffix (4.0.7)
     reddit_bot (1.10.0)
       json_pure
       nethttputils (~> 0.4.2.0)
