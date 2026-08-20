@@ -17,7 +17,9 @@ OptionParser.new do |parser|
   parser.separator "Show the RBTV programme schedule"
   parser.separator ""
   parser.separator "Options:"
-  parser.on('-r', '--subreddit=SUBREDDIT', 'Comma separated list of subreddits') {|r| subreddit = "r/#{r}" }
+  parser.on('-r', '--subreddit=SUBREDDIT', 'Comma separated list of subreddits') { |r|
+    subreddit = r
+  }
 end.parse!
 
 days = (0..6).map { |i| Date.today + i }
